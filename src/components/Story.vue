@@ -1,16 +1,28 @@
 <template>
   <div class="story">
-    Once upon a time ...
+    <p v-for="(paragraph, index) in paragraphs"
+       v-bind:paragraph="paragraph"
+       v-bind:key="index">
+      {{ paragraph }}
+    </p>
   </div>
 </template>
 
 <script>
 
+import story from '../story.js'
+
 export default {
   name: 'Story',
   data () {
     return {
-      msg: ''
+      paragraphs: []
+    }
+  },
+  mounted () {
+    console.log(this)
+    while (story.canContinue) {
+      this.paragraphs.append(story.Continue())
     }
   }
 }
