@@ -1,23 +1,26 @@
 <template>
   <div id="app">
     <img id="logo" src="./assets/images/logo.png">
-    <div class="story">
-      <Story/>
-    </div>
+    <Catalogue :entries=stories />
   </div>
 </template>
 
 <script>
 
-import Story from './components/Story.vue'
+import Catalogue from './components/Catalogue'
+
+import stories from './assets/stories'
 
 export default {
-
   name: 'app',
   components: {
-    Story
+    Catalogue
+  },
+  data () {
+    return {
+      stories: stories
+    }
   }
-
 }
 
 </script>
