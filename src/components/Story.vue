@@ -18,6 +18,19 @@
 
 import story from '../story.js'
 
+function readStory(data) {
+  while (story.canContinue) {
+    data.paragraphs.push(story.Continue())
+  }
+  console.log(story.currentChoices)
+  data.choices = []  
+  if (story.currentChoices.length > 0) {
+    data.choices = [].concat(story.currentChoices)
+  } else {
+    data.paragraphs.push("~ The End ~");
+  }
+}
+
 export default {
   name: 'Story',
   data () {
@@ -27,17 +40,12 @@ export default {
     }
   },
   mounted () {
-    while (story.canContinue) {
-      this.$data.paragraphs.push(story.Continue())
-    }
-    console.log(story.currentChoices)
-    if (story.currentChoices) {
-      this.$data.choices = [].concat(story.currentChoices)
-    }
+    readStory(this.$data)
   },
   methods: {
     choose: function (choice) {
-      alert(choice)
+        story.ChooseChoiceIndex(choice.index)
+        readStory(this.$data)
     }
   }
 }
