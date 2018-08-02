@@ -5,6 +5,12 @@
        v-bind:key="index">
       {{ paragraph }}
     </p>
+    <div v-if="choices"
+         v-for="choice in choices"
+         v-bind:key="choice.text">
+      <button
+        v-on:click="choose(choice)">{{choice.text}}</button>
+    </div>
   </div>
 </template>
 
@@ -16,13 +22,22 @@ export default {
   name: 'Story',
   data () {
     return {
-      paragraphs: []
+      paragraphs: [],
+      choices: []
     }
   },
   mounted () {
-    console.log(this)
     while (story.canContinue) {
-      this.paragraphs.append(story.Continue())
+      this.$data.paragraphs.push(story.Continue())
+    }
+    console.log(story.currentChoices)
+    if (story.currentChoices) {
+      this.$data.choices = [].concat(story.currentChoices)
+    }
+  },
+  methods: {
+    choose: function (choice) {
+      alert(choice)
     }
   }
 }
