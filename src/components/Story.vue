@@ -1,12 +1,12 @@
 <template>
   <div class="story">
-    <p v-for="(paragraph, index) in paragraphs"
+    <p v-for="(paragraph, index) in session.paragraphs"
        v-bind:paragraph="paragraph"
        v-bind:key="index">
       {{ paragraph }}
     </p>
-    <div v-if="choices"
-         v-for="choice in choices"
+    <div v-if="session.choices"
+         v-for="choice in session.choices"
          v-bind:key="choice.text">
       <button
         v-on:click="choose(choice)">{{choice.text}}</button>
@@ -16,36 +16,58 @@
 
 <script>
 
-import story from '../story.js'
+let inkjs = require('inkjs')
 
-function readStory(data) {
-  while (story.canContinue) {
-    data.paragraphs.push(story.Continue())
-  }
-  console.log(story.currentChoices)
-  data.choices = []  
-  if (story.currentChoices.length > 0) {
-    data.choices = [].concat(story.currentChoices)
-  } else {
-    data.paragraphs.push("~ The End ~");
-  }
+class Session {
+
+    constructor(story) {
+      let content = require('../assets/stories/' + story.file)
+      this.story = new inkjs.Story(content)
+      this.paragraphs = []
+      this.choices = []
+    }
+
+    next() {
+        while (this.story.canContinue) {
+            this.paragraphs.push(this.story.Continue())
+        }
+        this.choices = []  
+        if (this.story.currentChoices.length > 0) {
+            this.choices = [].concat(this.story.currentChoices)
+        } else {
+            this.paragraphs.push("~ The End ~");
+        }
+    }
+
+    choose(choice) {
+        this.story.ChooseChoiceIndex(choice.index)
+        this.next()
+    }
+    
 }
+
 
 export default {
   name: 'Story',
   data () {
     return {
-      paragraphs: [],
-      choices: []
+      session: null
     }
   },
+  props: {
+    story: {
+      type: Object,
+      required: true
+    }    
+  },
   mounted () {
-    readStory(this.$data)
+    console.log(this.story)
+    this.session = new Session(this.story)
+    this.session.next()
   },
   methods: {
-    choose: function (choice) {
-        story.ChooseChoiceIndex(choice.index)
-        readStory(this.$data)
+      choose: function (choice) {
+        this.session.choose(choice)
     }
   }
 }
