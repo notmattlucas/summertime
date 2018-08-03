@@ -1,10 +1,12 @@
 [
   {
     "id": "1",
-    "title": "The Tooth Fairy"
+    "title": "The Tooth Fairy",
+    "cover": "tooth_fairy.png"
   },
   {
     "id": "2",
-    "title": "Joel at the Zoo"
+    "title": "Joel at the Zoo",
+    "cover": "joel_zoo.png"
   }
 ]
