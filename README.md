@@ -1,4 +1,4 @@
-# summerthyme
+# summertime
 
 > Interactive educational stories using Inkle
 
