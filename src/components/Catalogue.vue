@@ -1,31 +1,39 @@
 <template>
   <div class="catalogue">
-    <ul v-for="entry in entries" v-bind:key="entry.id">
-      <li><button v-on:click="open(entry)">{{entry.title}}</button></li>
-    </ul>
-    <Modal v-if=story>
-      <template slot="content">
-        <Story :story=story />
-      </template>
-    </Modal>
+    <div class="card-deck">
+      <div v-for="entry in entries" v-bind:key="entry.id">
+        <b-card :title=entry.title
+                :img-src=cover(entry)
+                :img-alt=entry.title
+                img-left
+                style="max-width: 15rem;"
+                class="mb-2 shadow-lg p-3 mb-5 bg-white rounded">
+          <p class="card-text">
+            {{entry.description}}
+          </p>
+          <b-button class="mx-auto" variant="primary" v-on:click="story = entry" data-toggle="modal" data-target="#exampleModal">
+            Read
+          </b-button>
+        </b-card>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 
 import Story from './Story'
-import Modal from './Modal'
 
 export default {
   name: 'Catalogue',
   components: {
-    Modal, Story
+    Story
   },
   data () {
-      return {
-          story: null
-      }
-  },        
+    return {
+      story: null
+    }
+  },
   props: {
     entries: {
       type: Array,
@@ -33,8 +41,12 @@ export default {
     }
   },
   methods: {
-    open: function(entry) {
-      this.story = entry
+    cover: function (entry) {
+      try {
+        return require('../assets/images/' + entry.cover)
+      } catch (error) {
+        return require('../assets/images/placeholder.jpg')
+      }
     }
   }
 }
@@ -43,5 +55,17 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.catalogue {
+  padding: 3%;
+}
 
+.catalogue .item {
+
+}
+
+.catalogue .item img {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 0.05em solid #36454F;
+  width: 15%;
+}
 </style>

@@ -1,20 +1,33 @@
 <template>
   <div id="app">
-    <img id="logo" src="./assets/images/logo.png">
-    <Catalogue :entries=stories />
+    <Header/>
+    <b-jumbotron id="jumbo" bg-variant="warning" text-variant="dark">
+      <template slot="header">
+        <img src="./assets/images/logo.png" />
+      </template>
+      <template slot="lead">
+        <p class="subline">
+          <i>Interactive stories for kids</i>
+        </p>
+      </template>
+    </b-jumbotron>
+    <div class="stories">
+      <Catalogue :entries=stories />
+    </div>
   </div>
 </template>
 
 <script>
 
 import Catalogue from './components/Catalogue'
+import Header from './components/Header'
 
 import stories from './assets/stories'
 
 export default {
-  name: 'app',
+  name: 'App',
   components: {
-    Catalogue
+    Catalogue, Header
   },
   data () {
     return {
@@ -30,14 +43,12 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  text-align: left;
   color: #2c3e50;
 }
 
 body {
   margin: 0;
-  background: linear-gradient(315deg, #8cd9b3, #ffffe6);
-  background-repeat: no-repeat;
   height: 100%;
 }
 
@@ -45,16 +56,20 @@ html {
   height: 100%;
 }
 
-#logo {
-  float: left;
-  margin-left: 1%;
-  margin-top: 2%;
-  transform: rotate(-10deg);
+.subline {
+  margin-left: 5em;
 }
 
-.story {
-  margin: 0px;
-  clear: both;
+.section p {
+  margin: 0;
+}
+
+.stories {
+
+}
+
+#jumbo {
+  margin-bottom: 0;
 }
 
 </style>
