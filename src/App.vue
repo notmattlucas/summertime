@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Header/>
+    <Header :showHome=false />
     <b-jumbotron id="jumbo" bg-variant="warning" text-variant="dark">
       <template slot="header">
         <img src="./assets/images/logo.png" />
