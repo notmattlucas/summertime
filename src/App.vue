@@ -1,38 +1,20 @@
 <template>
   <div id="app">
-    <Header :showHome=false />
-    <b-jumbotron id="jumbo" bg-variant="warning" text-variant="dark">
-      <template slot="header">
-        <img src="./assets/images/logo.png" />
-      </template>
-      <template slot="lead">
-        <p class="subline">
-          <i>Interactive stories for kids</i>
-        </p>
-      </template>
-    </b-jumbotron>
-    <div class="stories">
-      <Catalogue :entries=stories />
-    </div>
+    <Header />
+    <transition name="fade" mode="out-in">
+      <router-view></router-view>
+    </transition>
   </div>
 </template>
 
 <script>
 
-import Catalogue from './components/Catalogue'
 import Header from './components/Header'
-
-import stories from './assets/stories'
 
 export default {
   name: 'App',
   components: {
-    Catalogue, Header
-  },
-  data () {
-    return {
-      stories: stories
-    }
+    Header
   }
 }
 
@@ -56,20 +38,11 @@ html {
   height: 100%;
 }
 
-.subline {
-  margin-left: 5em;
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s;
 }
-
-.section p {
-  margin: 0;
-}
-
-.stories {
-
-}
-
-#jumbo {
-  margin-bottom: 0;
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 
 </style>

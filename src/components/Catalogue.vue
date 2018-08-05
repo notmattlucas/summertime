@@ -11,9 +11,11 @@
           <p class="card-text">
             {{entry.description}}
           </p>
-          <b-button class="mx-auto" variant="primary" v-on:click="story = entry" data-toggle="modal" data-target="#exampleModal">
-            Read
-          </b-button>
+          <router-link :to="/story/ + entry.id">
+            <b-button class="mx-auto" variant="primary">
+              Read
+            </b-button>
+          </router-link>
         </b-card>
       </div>
     </div>
