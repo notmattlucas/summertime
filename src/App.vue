@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="d-flex flex-column">
     <Header />
     <transition name="fade" mode="out-in">
       <router-view></router-view>
@@ -27,6 +27,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: left;
   color: #2c3e50;
+  height: 100%;
 }
 
 body {
