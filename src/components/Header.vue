@@ -19,10 +19,7 @@
 
 <script>
 export default {
-  name: 'Header',
-  mounted () {
-    console.log(this.$router.currentRoute)
-  }
+  name: 'Header'
 }
 </script>
 

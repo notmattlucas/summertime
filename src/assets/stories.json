@@ -1,15 +1,15 @@
-[
-  {
+{
+  "1": {
     "id": "1",
     "title": "The Tooth Fairy",
     "description": "Summer has a visit from the tooth fairy after one of her baby teeth falls out",
     "cover": "tooth_fairy.png",
     "file": "tooth_fairy.json"
   },
-  {
+  "2": {
     "id": "2",
     "title": "Joel at the Zoo",
     "description": "Joel loves animals, and has an exciting adventure whilst visiting some at the zoo",
     "cover": "joel_zoo.png"
   }
-]
+}

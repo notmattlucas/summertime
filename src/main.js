@@ -17,8 +17,6 @@ Vue.use(BootstrapVue)
 Vue.use(VueRouter)
 Vue.component('icon', Icon)
 
-console.log(router)
-
 /* eslint-disable no-new */
 new Vue({
   router,

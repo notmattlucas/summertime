@@ -11,7 +11,7 @@
           <p class="card-text">
             {{entry.description}}
           </p>
-          <router-link :to="/story/ + entry.id">
+          <router-link :to="{ name: 'story', params: { id: entry.id } }">
             <b-button class="mx-auto" variant="primary">
               Read
             </b-button>
@@ -38,16 +38,16 @@ export default {
   },
   props: {
     entries: {
-      type: Array,
+      type: Object,
       required: true
     }
   },
   methods: {
     cover: function (entry) {
       try {
-        return require('../assets/images/' + entry.cover)
+        return require('@/assets/images/' + entry.cover)
       } catch (error) {
-        return require('../assets/images/placeholder.jpg')
+        return require('@/assets/images/placeholder.jpg')
       }
     }
   }
