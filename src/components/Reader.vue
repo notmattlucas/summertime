@@ -1,3 +1,4 @@
+
 <template>
   <div v-if="story" class="surround flex-fill flex-column">
     <div class="page flex-fill align-content-center shadow-lg p-3">
@@ -36,7 +37,7 @@ export default {
   margin-top: 1%;
   margin-bottom: 1%;
   background-color: #FFFFF0;
-  background-image: linear-gradient(to left top, #FFFFF0, #FFFFFF);
+  background-image: linear-gradient(to left top, #FFFFE0, #FFFFF0, #FFFFFF);
   max-width: 50rem;
   width: 100%;
   font-family: 'Bookman', 'Times New Roman', serif;
