@@ -1,7 +1,7 @@
 <template>
   <div class="catalogue">
     <div class="card-deck">
-      <div v-for="entry in entries" v-bind:key="entry.id">
+      <div class="item" v-for="entry in entries" v-bind:key="entry.id">
         <b-card :title=entry.title
                 :img-src=cover(entry)
                 :img-alt=entry.title
@@ -65,9 +65,4 @@ export default {
 
 }
 
-.catalogue .item img {
-  background-color: rgba(255, 255, 255, 0.1);
-  border: 0.05em solid #36454F;
-  width: 15%;
-}
 </style>

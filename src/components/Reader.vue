@@ -4,16 +4,21 @@
     <div class="page flex-fill align-content-center shadow-lg p-3">
       <h2 align="center">{{story.title}}</h2>
       <hr/>
+      <Story class="story" :story=story />
     </div>
   </div>
 </template>
 
 <script>
 
+import Story from '@/components/Story'
 import stories from '@/assets/stories'
 
 export default {
   name: 'Reader',
+  components: {
+    Story
+  },
   data () {
     return {
       story: null
@@ -41,6 +46,10 @@ export default {
   max-width: 50rem;
   width: 100%;
   font-family: 'Bookman', 'Times New Roman', serif;
+}
+
+.story {
+  padding: 10%;
 }
 
 </style>
