@@ -9,15 +9,20 @@
         </p>
       </transition-group>
       <transition name="fade" v-on:leave="chosen">
-        <div v-if="session.choices.length > 0">
-            <b-button v-for="choice in session.choices"
-                    v-bind:key="choice.text"
-                    class="choice mx-auto" variant="primary"
-                    v-on:click="choose(choice)">
-            <b>{{choice.text}}</b>
-          </b-button>
-        </div>
+        <b-button-toolbar class="choices" v-if="session.choices.length > 0">
+          <div class="border">
+              <b-button v-for="choice in session.choices"
+                      v-bind:key="choice.text"
+                      class="choice mx-1" :variant="color.next().value"
+                      v-on:click="choose(choice)">
+              {{choice.text}}
+            </b-button>
+          </div>
+        </b-button-toolbar >
       </transition>
+    <transition name="fade">
+      <hr class="end" v-if="session.finished"/>
+    </transition>
   </div>
 </template>
 
@@ -25,12 +30,22 @@
 
 let inkjs = require('inkjs')
 
+function* colors () {
+  let colorSet = ['primary', 'danger', 'warning', 'success', 'info']
+  while (true) {
+    for (var idx in colorSet) {
+      yield colorSet[idx]
+    }
+  }
+}
+
 class Session {
   constructor (story) {
     let content = require('../assets/stories/' + story.file)
     this.story = new inkjs.Story(content)
     this.paragraphs = []
     this.choices = []
+    this.finished = false
   }
 
   next () {
@@ -40,7 +55,7 @@ class Session {
     if (this.story.currentChoices.length > 0) {
       this.choices = [].concat(this.story.currentChoices)
     } else {
-      this.paragraphs.push('~ The End ~')
+      this.finished = true
     }
   }
 
@@ -54,7 +69,8 @@ export default {
   name: 'Story',
   data () {
     return {
-      session: null
+      session: null,
+      color: colors()
     }
   },
   props: {
@@ -86,7 +102,10 @@ export default {
 }
 .choice {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  margin: 0.25rem;
+}
+.choices {
+  justify-content: center;
+  align-items: center;
 }
 .list-item {
   display: inline-block;
@@ -95,8 +114,30 @@ export default {
 .list-enter-active, .list-leave-active {
   transition: all 0.5s;
 }
-.list-enter, .list-leave-to /* .list-leave-active below version 2.1.8 */ {
+.list-enter, .list-leave-to /* .list-leave-active below version 2.1.8 */
+{
   opacity: 0;
   transform: translateY(30px);
 }
+.border {
+  padding: 1rem;
+}
+
+.end {
+  text-align: center;
+  margin-top: 3rem;
+}
+
+.end:after {
+  font-size: 1.25rem;
+  text-align: center;
+  content: "The End";
+  display: inline-block;
+  position: relative;
+  top: -0.7em;
+  font-size: 1.5em;
+  background: #FFFFF0;
+  padding: 0 0.25em;
+}
+
 </style>
