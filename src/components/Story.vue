@@ -21,7 +21,14 @@
         </b-button-toolbar >
       </transition>
     <transition name="fade">
-      <hr class="end" v-if="session.finished"/>
+      <div v-if="session.finished">
+        <hr class="end"/>
+        <div class="end-routes">
+          <router-link class="text-secondary" to="/">
+            <icon name="arrow-circle-left" scale="4"/>
+          </router-link>
+        </div>
+      </div>
     </transition>
   </div>
 </template>
@@ -138,6 +145,13 @@ export default {
   font-size: 1.5em;
   background: #FFFFF0;
   padding: 0 0.25em;
+}
+
+.end-routes {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-top: 2rem;
 }
 
 </style>

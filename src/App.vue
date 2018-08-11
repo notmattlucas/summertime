@@ -2,7 +2,7 @@
   <div id="app" class="d-flex flex-column">
     <Header />
     <transition name="fade" mode="out-in">
-      <router-view></router-view>
+      <router-view :key="$route.fullPath"></router-view>
     </transition>
   </div>
 </template>
