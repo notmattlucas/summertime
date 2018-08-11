@@ -57,7 +57,9 @@ class Session {
 
   next () {
     while (this.story.canContinue) {
-      this.paragraphs.push(this.story.Continue())
+      let paragraph = this.story.Continue()
+      this.handleTags(this.story.currentTags)
+      this.paragraphs.push(paragraph)
     }
     if (this.story.currentChoices.length > 0) {
       this.choices = [].concat(this.story.currentChoices)
@@ -69,6 +71,16 @@ class Session {
   choose (choice) {
     this.story.ChooseChoiceIndex(choice.index)
     this.choices = []
+  }
+
+  handleTags (tags) {
+    for (let idx in tags) {
+      let tag = tags[idx]
+      if (tag === 'question') {
+        this.paragraphs = []
+        this.choices = []
+      }
+    }
   }
 }
 
