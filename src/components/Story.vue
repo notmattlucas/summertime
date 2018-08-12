@@ -1,25 +1,34 @@
 <template>
   <div class="container story" v-if="session">
       <transition-group name="list" tag="p">
-        <p class="paragraph"
-           v-for="(paragraph, index) in session.paragraphs"
-           v-bind:paragraph="paragraph"
-           v-bind:key="index">
-          {{ paragraph }}
-        </p>
+        <div v-for="(atom, index) in session.atoms"
+             v-bind:key="index">
+
+          <p class="paragraph"
+             v-if="atom.type === AtomType.PARAGRAPH"
+             v-bind:key="index">
+            {{ atom.content }}
+          </p>
+
+          <b-button-toolbar class="choices" v-if="atom.type === AtomType.CHOICE">
+            <div class="border">
+              <b-button v-for="choice in atom.choices"
+                        v-bind:key="choice.text"
+                        class="choice mx-1" :variant="color.next().value"
+                        v-on:click="choose(choice)">
+                {{choice.text}}
+              </b-button>
+            </div>
+          </b-button-toolbar >
+
+          <b-img v-if="atom.type === AtomType.IMAGE"
+            :src="image(atom.image)"
+          />
+        </div>
       </transition-group>
-      <transition name="fade" v-on:leave="chosen">
-        <b-button-toolbar class="choices" v-if="session.choices.length > 0">
-          <div class="border">
-              <b-button v-for="choice in session.choices"
-                      v-bind:key="choice.text"
-                      class="choice mx-1" :variant="color.next().value"
-                      v-on:click="choose(choice)">
-              {{choice.text}}
-            </b-button>
-          </div>
-        </b-button-toolbar >
-      </transition>
+      <!--<transition name="fade" v-on:leave="chosen">-->
+
+      <!--</transition>-->
     <transition name="fade">
       <div v-if="session.finished">
         <hr class="end"/>
@@ -46,39 +55,70 @@ function* colors () {
   }
 }
 
+let AtomType = Object.freeze({
+  'PARAGRAPH': 1,
+  'CHOICE': 2,
+  'IMAGE': 3
+})
+
+class ParagraphAtom {
+  constructor (content) {
+    this.type = AtomType.PARAGRAPH
+    this.content = content
+  }
+}
+
+class ChoiceAtom {
+  constructor (choices) {
+    this.type = AtomType.CHOICE
+    this.choices = choices
+  }
+}
+
+class ImageAtom {
+  constructor (tag) {
+    this.type = AtomType.IMAGE
+    let match = /img:\s+(.+)/.exec(tag)[1]
+    this.image = match.trim()
+  }
+}
+
 class Session {
   constructor (story) {
     let content = require('../assets/stories/' + story.file)
     this.story = new inkjs.Story(content)
-    this.paragraphs = []
-    this.choices = []
+    this.atoms = []
     this.finished = false
   }
 
   next () {
     while (this.story.canContinue) {
-      let paragraph = this.story.Continue()
+      let content = this.story.Continue()
+      let paragraph = new ParagraphAtom(content)
       this.handleTags(this.story.currentTags)
-      this.paragraphs.push(paragraph)
+      this.atoms.push(paragraph)
     }
     if (this.story.currentChoices.length > 0) {
-      this.choices = [].concat(this.story.currentChoices)
+      let content = this.story.currentChoices
+      let choice = new ChoiceAtom(content)
+      this.atoms.push(choice)
     } else {
       this.finished = true
     }
   }
 
   choose (choice) {
+    this.atoms.pop()
     this.story.ChooseChoiceIndex(choice.index)
-    this.choices = []
   }
 
   handleTags (tags) {
     for (let idx in tags) {
       let tag = tags[idx]
       if (tag === 'question') {
-        this.paragraphs = []
-        this.choices = []
+        this.atoms = []
+      } else if (tag.startsWith('img')) {
+        this.atoms.push(new ImageAtom(tag))
       }
     }
   }
@@ -89,7 +129,8 @@ export default {
   data () {
     return {
       session: null,
-      color: colors()
+      color: colors(),
+      AtomType: AtomType
     }
   },
   props: {
@@ -105,10 +146,10 @@ export default {
   methods: {
     choose: function (choice) {
       this.session.choose(choice)
-    },
-    chosen: function (el, done) {
       this.session.next()
-      done()
+    },
+    image: function (path) {
+      return '/static/images/' + path
     }
   }
 }
@@ -164,6 +205,13 @@ export default {
   align-items: center;
   text-align: center;
   margin-top: 2rem;
+}
+
+.story img {
+  display: block;
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 </style>

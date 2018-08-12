@@ -44,11 +44,7 @@ export default {
   },
   methods: {
     cover: function (entry) {
-      try {
-        return require('@/assets/images/' + entry.cover)
-      } catch (error) {
-        return require('@/assets/images/placeholder.jpg')
-      }
+      return '/static/images/' + entry.cover
     }
   }
 }
