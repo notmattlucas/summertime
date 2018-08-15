@@ -10,6 +10,17 @@
             {{ atom.content }}
           </p>
 
+          <p class="equation"
+             v-if="atom.type === AtomType.EQUATION">
+            {{ atom.equation }}
+          </p>
+
+          <p class="icon"
+             v-if="atom.type == AtomType.ANSWER">
+            <icon class="text-success" v-if="atom.answer === 'right'" name="check" scale="3" />
+            <icon class="text-danger" v-if="atom.answer === 'wrong'" name="times" scale="3" />
+          </p>
+
           <b-button-toolbar class="choices" v-if="atom.type === AtomType.CHOICE">
             <div class="border">
               <b-button v-for="choice in atom.choices"
@@ -58,7 +69,9 @@ function* colors () {
 let AtomType = Object.freeze({
   'PARAGRAPH': 1,
   'CHOICE': 2,
-  'IMAGE': 3
+  'IMAGE': 3,
+  'EQUATION': 4,
+  'ANSWER': 5
 })
 
 class ParagraphAtom {
@@ -78,8 +91,24 @@ class ChoiceAtom {
 class ImageAtom {
   constructor (tag) {
     this.type = AtomType.IMAGE
-    let match = /img:\s+(.+)/.exec(tag)[1]
+    let match = /img:\s*(.+)/.exec(tag)[1]
     this.image = match.trim()
+  }
+}
+
+class EquationAtom {
+  constructor (tag) {
+    this.type = AtomType.EQUATION
+    let match = /eq:\s*(.+)/.exec(tag)[1]
+    this.equation = match.trim()
+  }
+}
+
+class AnswerAtom {
+  constructor (tag) {
+    this.type = AtomType.ANSWER
+    let match = /answer:\s*(.+)/.exec(tag)[1]
+    this.answer = match.trim()
   }
 }
 
@@ -115,10 +144,16 @@ class Session {
   handleTags (tags) {
     for (let idx in tags) {
       let tag = tags[idx]
-      if (tag === 'question') {
-        this.atoms = []
+      if (tag === 'question' || tag === 'chapter') {
+        while (this.atoms.length > 0) {
+          this.atoms.pop()
+        }
       } else if (tag.startsWith('img')) {
         this.atoms.push(new ImageAtom(tag))
+      } else if (tag.startsWith('eq')) {
+        this.atoms.push(new EquationAtom(tag))
+      } else if (tag.startsWith('answer')) {
+        this.atoms.push(new AnswerAtom(tag))
       }
     }
   }
@@ -212,6 +247,17 @@ export default {
   width: 50%;
   margin-left: auto;
   margin-right: auto;
+}
+
+.equation {
+  font-size: 1.75rem;
+  font-weight: bold;
+  text-align: center;
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+}
+
+.icon {
+  text-align: center;
 }
 
 </style>
