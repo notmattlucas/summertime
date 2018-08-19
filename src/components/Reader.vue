@@ -2,9 +2,17 @@
 <template>
   <div v-if="story" class="surround flex-fill flex-column">
     <div class="page flex-fill align-content-center shadow-lg p-3">
-      <h2 align="center">{{story.title}}</h2>
+      <h2 align="center">
+        {{story.title}}
+        <b-btn v-b-modal.credits variant="link" class="credits text-secondary">
+          <icon name="info-circle" scale="1"/>
+        </b-btn>
+      </h2>
       <hr/>
       <Story class="story" :story=story />
+      <b-modal id="credits" ok-only="true" title="Credits">
+        <p>Hello World!</p>
+      </b-modal>
     </div>
   </div>
 </template>
@@ -50,6 +58,10 @@ export default {
 
 .story {
   padding: 10%;
+}
+
+.credits {
+  padding-left:0;
 }
 
 </style>
